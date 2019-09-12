@@ -81,5 +81,26 @@ namespace StringCalculator.Tests
 
             Assert.AreEqual(sum, expectedSum);
         }
+
+        [TestCase("1\n2,3", 6)]
+        [TestCase("1,2\n3", 6)]
+        [TestCase("1\n2\n3", 6)]
+        public void Add_ValidNewLineAsDelimiter_ReturnSum(string input, int expectedSum)
+        {
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
+
+        [TestCase("\n", 0)]
+        [TestCase("\n\n", 0)]
+        [TestCase("\n,\n", 0)]
+        [TestCase("\n,1\n", 1)]
+        public void Add_InvalidNewLineAsDelimiter_ReturnSum(string input, int expectedSum)
+        {
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
     }
 }

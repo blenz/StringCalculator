@@ -24,7 +24,7 @@ namespace StringCalculator
         {
             // Try to parse strings 
             // as ints else use 0
-            var numbers = input.Split(',')
+            var numbers = input.Split(',', '\n')
                 .Select(i =>
                 {
                     int number = 0;
