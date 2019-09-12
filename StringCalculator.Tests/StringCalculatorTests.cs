@@ -24,7 +24,6 @@ namespace StringCalculator.Tests
             Assert.AreEqual(sum, expectedSum);
         }
 
-        [TestCase("1,2,3", 3)]
         [TestCase("5,x", 5)]
         [TestCase("x,5", 5)]
         [TestCase("x,x", 0)]
@@ -58,6 +57,29 @@ namespace StringCalculator.Tests
             var sum = _calc.Add(input);
 
             Assert.AreEqual(sum, 0);
+        }
+
+        [TestCase("1,2,3,4,5,6,7,8,9,10,11,12", 78)]
+        [TestCase("1,1,1,1,1,1,1,1,1,1", 10)]
+        [TestCase("1,2,3", 6)]
+        public void Add_ValidNumberList_ReturnSum(string input, int expectedSum)
+        {
+            int sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
+
+        [TestCase(",,,,,,,,,", 0)]
+        [TestCase("5,,,,,,,,,", 5)]
+        [TestCase(",,,,,5,,,,", 5)]
+        [TestCase(",,,,,,,,,5", 5)]
+        [TestCase("5,,,,,,,,,5", 10)]
+        [TestCase("1,,a,bad,a, ,a, ,a,", 1)]
+        public void Add_InvalidNumberList_InvalidNumberAsZeroReturnSum(string input, int expectedSum)
+        {
+            int sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
         }
     }
 }

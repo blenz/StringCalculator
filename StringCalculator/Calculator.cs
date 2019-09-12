@@ -1,34 +1,39 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StringCalculator
 {
     public class Calculator
     {
-        private int _firstNumber, _secondNumber;
+        private List<int> _numbers;
 
         public Calculator()
         {
-            _firstNumber = 0;
-            _secondNumber = 0;
+            _numbers = new List<int>();
         }
 
         public int Add(string input)
         {
             ParseInput(input);
 
-            return _firstNumber + _secondNumber;
+            return _numbers.Sum();
         }
 
         private void ParseInput(string input)
         {
-            var numbers = input.Split(',');
+            // Try to parse strings 
+            // as ints else use 0
+            var numbers = input.Split(',')
+                .Select(i =>
+                {
+                    int number = 0;
+                    Int32.TryParse(i, out number);
+                    return number;
+                });
 
-            // Try to parse strings as numbers else use 0
-            var firstNumber = numbers.Length >= 1 ? numbers[0] : "0";
-            Int32.TryParse(firstNumber, out _firstNumber);
-
-            var secondNumber = numbers.Length >= 2 ? numbers[1] : "0";
-            Int32.TryParse(secondNumber, out _secondNumber);
+            _numbers.Clear();
+            _numbers.AddRange(numbers);
         }
     }
 }
