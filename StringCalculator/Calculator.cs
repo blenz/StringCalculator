@@ -16,6 +16,7 @@ namespace StringCalculator
         public int Add(string input)
         {
             ParseInput(input);
+            ValidateNumbers();
 
             return _numbers.Sum();
         }
@@ -34,6 +35,24 @@ namespace StringCalculator
 
             _numbers.Clear();
             _numbers.AddRange(numbers);
+        }
+
+        private void ValidateNumbers()
+        {
+            var negativeNumbers = _numbers
+                .Where(num => num < 0)
+                .ToList();
+
+            // If there are negative numbers
+            // throw an exception
+            if (negativeNumbers.Count > 0)
+            {
+                var negativeNumbersStr = string.Join(
+                    ", ", negativeNumbers.ToArray()
+                ).TrimEnd();
+
+                throw new ArgumentException("Negative numbers were found: " + negativeNumbersStr);
+            }
         }
     }
 }

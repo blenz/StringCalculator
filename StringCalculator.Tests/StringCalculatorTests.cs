@@ -102,5 +102,17 @@ namespace StringCalculator.Tests
 
             Assert.AreEqual(sum, expectedSum);
         }
+
+        [TestCase("-2,0,2", "Negative numbers were found: -2")]
+        [TestCase("-2,-2\n-2", "Negative numbers were found: -2, -2, -2")]
+        [TestCase("-1", "Negative numbers were found: -1")]
+        public void Add_NegativeNumbers_ThrowException(string input, string errorMessage)
+        {
+            var exception = Assert.Throws<ArgumentException>(() =>
+                _calc.Add(input)
+            );
+
+            Assert.That(exception.Message, Is.EqualTo(errorMessage));
+        }
     }
 }
