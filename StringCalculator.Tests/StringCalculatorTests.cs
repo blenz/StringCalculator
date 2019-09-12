@@ -13,9 +13,8 @@ namespace StringCalculator.Tests
             _calc = new Calculator();
         }
 
-        [TestCase("1,5000", 5001)]
-        [TestCase("0,0", 0)]
         [TestCase("5,5", 10)]
+        [TestCase("0,0", 0)]
         [TestCase("5 , 5", 10)]
         public void Add_TwoValidNumbers_ReturnSum(string input, int expectedSum)
         {
@@ -113,6 +112,16 @@ namespace StringCalculator.Tests
             );
 
             Assert.That(exception.Message, Is.EqualTo(errorMessage));
+        }
+
+        [TestCase("1,999,1", 1001)]
+        [TestCase("1,1000,1", 1002)]
+        [TestCase("1,1001,1", 2)]
+        public void Add_NumbersAboveUpperBoundLimit_IgnoreNumbersOverUpperBoundReturnSum(string input, int expectedSum)
+        {
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
         }
     }
 }

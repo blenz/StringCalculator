@@ -53,6 +53,14 @@ namespace StringCalculator
 
                 throw new ArgumentException("Negative numbers were found: " + negativeNumbersStr);
             }
+
+            // Ignore all numbers greater than 1000
+            // by setting them to 0
+            _numbers = _numbers.Select(num =>
+                {
+                    return num <= 1000 ? num : 0;
+                })
+                .ToList();
         }
     }
 }
