@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace StringCalculator
 {
@@ -23,9 +24,11 @@ namespace StringCalculator
 
         private void ParseInput(string input)
         {
+            var delimiters = GetCustomDelimiters(ref input);
+
             // Try to parse strings 
             // as ints else use 0
-            var numbers = input.Split(',', '\n')
+            var numbers = input.Split(delimiters)
                 .Select(i =>
                 {
                     int number = 0;
@@ -61,6 +64,26 @@ namespace StringCalculator
                     return num <= 1000 ? num : 0;
                 })
                 .ToList();
+        }
+
+        private char[] GetCustomDelimiters(ref string input)
+        {
+            var delimiters = new HashSet<char>() { ',', '\n' };
+
+            // Check for custom delimiter
+            var match = Regex.Match(input, @"^//(.)\n(.*)");
+            if (match.Success)
+            {
+                // Add the custom delimiter
+                var customDelimiter = Char.Parse(match.Groups[1].Value);
+                delimiters.Add(customDelimiter);
+
+                // Set input to everything 
+                // after the custom delimiter
+                input = match.Groups.Last().Value;
+            }
+
+            return delimiters.ToArray();
         }
     }
 }

@@ -123,5 +123,34 @@ namespace StringCalculator.Tests
 
             Assert.AreEqual(sum, expectedSum);
         }
+
+        [TestCase("//;\n2;5", 7)]
+        [TestCase("//,\n2,5", 7)]
+        [TestCase("//.\n2.5", 7)]
+        [TestCase("//l\n2l5", 7)]
+        [TestCase("//2\n125", 6)]
+        [TestCase("///\n1/5", 6)]
+        [TestCase("//\n\n1\n5", 6)]
+        [TestCase("// \n1 5", 6)]
+        public void Add_ValidCustomDelimiter_ReturnSum(string input, int expectedSum)
+        {
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
+
+        [TestCase("///;\n2;5", 0)]
+        [TestCase("/;\n2;5", 0)]
+        [TestCase(",\n2,5", 7)]
+        [TestCase("//\n2,5", 7)]
+        [TestCase("//;2,5", 5)]
+        [TestCase("/,/;\n2;5", 0)]
+        [TestCase(",//;\n2;5", 0)]
+        public void Add_InvalidCustomDelimiter_ReturnSum(string input, int expectedSum)
+        {
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
     }
 }
