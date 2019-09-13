@@ -28,7 +28,7 @@ namespace StringCalculator
 
             // Try to parse strings 
             // as ints else use 0
-            var numbers = input.Split(delimiters)
+            var numbers = input.Split(delimiters, StringSplitOptions.None)
                 .Select(i =>
                 {
                     int number = 0;
@@ -66,17 +66,28 @@ namespace StringCalculator
                 .ToList();
         }
 
-        private char[] GetCustomDelimiters(ref string input)
+        private string[] GetCustomDelimiters(ref string input)
         {
-            var delimiters = new HashSet<char>() { ',', '\n' };
+            var delimiters = new HashSet<string>() { ",", "\n" };
 
             // Check for custom delimiter
-            var match = Regex.Match(input, @"^//(.)\n(.*)");
+            var match = Regex.Match(input, @"^//(\[(.*)\]|(.))\n(.*)");
+
             if (match.Success)
             {
-                // Add the custom delimiter
-                var customDelimiter = Char.Parse(match.Groups[1].Value);
-                delimiters.Add(customDelimiter);
+                // Determine the delimiter type
+                var firstMatch = match.Groups[1].Value;
+
+                var isMultiLengthDelimiter =
+                    firstMatch.StartsWith('[')
+                    && firstMatch.EndsWith(']');
+
+                // Based on the delimiter type,
+                // choose the correct group to
+                // get the delimiter
+                var group = isMultiLengthDelimiter ? 2 : 3;
+
+                delimiters.Add(match.Groups[group].Value);
 
                 // Set input to everything 
                 // after the custom delimiter

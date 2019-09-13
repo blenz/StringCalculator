@@ -8,7 +8,7 @@
 - [x] Deny negative numbers
 - [x] Ignore any number greater than 1000
 - [x] Support 1 custom single character length delimiter
-- [ ] Support 1 custom delimiter of any length
+- [x] Support 1 custom delimiter of any length
 - [ ] Support multiple delimiters of any length
 
 ### Stretch Goals
