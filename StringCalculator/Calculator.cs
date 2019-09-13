@@ -19,7 +19,11 @@ namespace StringCalculator
             ParseInput(input);
             ValidateNumbers();
 
-            return _numbers.Sum();
+            var sum = _numbers.Sum();
+
+            PrintFormula(sum);
+
+            return sum;
         }
 
         private void ParseInput(string input)
@@ -102,6 +106,13 @@ namespace StringCalculator
             }
 
             return delimiters.ToArray();
+        }
+
+        private void PrintFormula(int result)
+        {
+            var formula = String.Join("+", _numbers.ToArray()).TrimEnd();
+
+            Console.WriteLine(String.Format("{0} = {1}", formula, result));
         }
     }
 }
