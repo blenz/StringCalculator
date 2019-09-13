@@ -247,5 +247,37 @@ namespace StringCalculator.Tests
                 _calc.Divide(input)
             );
         }
+
+        [TestCase("1/2/3", 6)]
+        public void AlternativeDelimiter_SetNewDelimiter_ReturnSum(string input, int expectedSum)
+        {
+            _calc.AlternativeDelimiter = "/";
+
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
+
+        [TestCase("1,3,-3", 1)]
+        public void DenyNegativeNumbers_SetToFalse_ReturnSum(string input, int expectedSum)
+        {
+            _calc.DenyNegativeNumbers = false;
+
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
+
+        [TestCase("1,9,1", 11)]
+        [TestCase("1,10,1", 12)]
+        [TestCase("1,11,1", 2)]
+        public void UpperBound_SetUpperBound_ReturnSum(string input, int expectedSum)
+        {
+            _calc.UpperBound = 10;
+
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
     }
 }

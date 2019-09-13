@@ -15,7 +15,7 @@
 
 - [x] Display the formula used to calculate the result
 - [x] Allow the application to process entered entries until Ctrl+C is used
-- [ ] Allow the acceptance of arguments
+- [x] Allow the acceptance of arguments
 - [ ] Use DI
 - [x] Support subtraction, multiplication, and division operations
 

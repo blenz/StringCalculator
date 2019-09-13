@@ -8,10 +8,34 @@ namespace StringCalculator
     public class Calculator
     {
         private List<int> _numbers;
+        private HashSet<string> _delimiters;
+
+        public string AlternativeDelimiter
+        {
+            set
+            {
+                _delimiters.Add(value);
+            }
+        }
+
+        private bool _denyNegativeNumbers;
+        public bool DenyNegativeNumbers
+        {
+            set { _denyNegativeNumbers = value; }
+        }
+
+        private int _upperBound;
+        public int UpperBound
+        {
+            set { _upperBound = value; }
+        }
 
         public Calculator()
         {
             _numbers = new List<int>();
+            _delimiters = new HashSet<string>() { ",", "\n" };
+            _denyNegativeNumbers = true;
+            _upperBound = 1000;
         }
 
         public int Add(string input)
@@ -88,34 +112,35 @@ namespace StringCalculator
 
         private void ValidateNumbers()
         {
-            var negativeNumbers = _numbers
-                .Where(num => num < 0)
-                .ToList();
-
-            // If there are negative numbers
-            // throw an exception
-            if (negativeNumbers.Count > 0)
+            if (_denyNegativeNumbers)
             {
-                var negativeNumbersStr = string.Join(
-                    ", ", negativeNumbers.ToArray()
-                ).TrimEnd();
+                var negativeNumbers = _numbers
+                    .Where(num => num < 0)
+                    .ToList();
 
-                throw new ArgumentException("Negative numbers were found: " + negativeNumbersStr);
+                // If there are negative numbers
+                // throw an exception
+                if (negativeNumbers.Count > 0)
+                {
+                    var negativeNumbersStr = string.Join(
+                        ", ", negativeNumbers.ToArray()
+                    ).TrimEnd();
+
+                    throw new ArgumentException("Negative numbers were found: " + negativeNumbersStr);
+                }
             }
 
             // Ignore all numbers greater than 1000
             // by setting them to 0
             _numbers = _numbers.Select(num =>
                 {
-                    return num <= 1000 ? num : 0;
+                    return num <= _upperBound ? num : 0;
                 })
                 .ToList();
         }
 
         private string[] GetCustomDelimiters(ref string input)
         {
-            var delimiters = new HashSet<string>() { ",", "\n" };
-
             // Check for custom delimiter
             var match = Regex.Match(input, @"^//((?:\[(.*?)\])+|.)\n(.*)");
 
@@ -139,7 +164,7 @@ namespace StringCalculator
                 var captures = match.Groups[group].Captures;
                 foreach (Capture capture in captures)
                 {
-                    delimiters.Add(capture.Value);
+                    _delimiters.Add(capture.Value);
                 }
 
                 // Set input to everything 
@@ -147,7 +172,7 @@ namespace StringCalculator
                 input = match.Groups.Last().Value;
             }
 
-            return delimiters.ToArray();
+            return _delimiters.ToArray();
         }
 
         private void PrintFormula(char mathOperation, int result)
