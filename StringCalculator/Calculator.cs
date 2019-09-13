@@ -60,6 +60,11 @@ namespace StringCalculator
 
         private int Calculate(string input, char mathOperation)
         {
+            if (String.IsNullOrEmpty(input) || String.IsNullOrWhiteSpace(input))
+            {
+                return 0;
+            }
+
             // Parse and clean the data
             ParseInput(input);
             ValidateNumbers();
