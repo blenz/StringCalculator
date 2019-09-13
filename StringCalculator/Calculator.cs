@@ -16,14 +16,56 @@ namespace StringCalculator
 
         public int Add(string input)
         {
+            return Calculate(input, '+');
+        }
+
+        public int Subtract(string input)
+        {
+            return Calculate(input, '-');
+        }
+
+        public int Mulitply(string input)
+        {
+            return Calculate(input, '*');
+        }
+
+        public int Divide(string input)
+        {
+            return Calculate(input, '/');
+        }
+
+        private int Calculate(string input, char mathOperation)
+        {
+            // Parse and clean the data
             ParseInput(input);
             ValidateNumbers();
 
-            var sum = _numbers.Sum();
+            // Determine the operation to calculate
+            Func<int, int, int> operation;
 
-            PrintFormula(sum);
+            switch (mathOperation)
+            {
+                case '+':
+                    operation = (a, b) => a + b;
+                    break;
+                case '-':
+                    operation = (a, b) => a - b;
+                    break;
+                case '*':
+                    operation = (a, b) => a * b;
+                    break;
+                case '/':
+                    operation = (a, b) => a / b;
+                    break;
+                default:
+                    throw new ArgumentException("Invalid math operation");
+            }
 
-            return sum;
+            var result = _numbers.Aggregate(operation);
+
+            PrintFormula(mathOperation, result);
+
+            return result;
         }
 
         private void ParseInput(string input)
@@ -108,9 +150,9 @@ namespace StringCalculator
             return delimiters.ToArray();
         }
 
-        private void PrintFormula(int result)
+        private void PrintFormula(char mathOperation, int result)
         {
-            var formula = String.Join("+", _numbers.ToArray()).TrimEnd();
+            var formula = String.Join(mathOperation, _numbers.ToArray()).TrimEnd();
 
             Console.WriteLine(String.Format("{0} = {1}", formula, result));
         }

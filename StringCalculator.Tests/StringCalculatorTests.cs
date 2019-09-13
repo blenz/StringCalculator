@@ -204,5 +204,48 @@ namespace StringCalculator.Tests
 
             Assert.AreEqual(sum, expectedSum);
         }
+
+        [TestCase("1,2,3", -4)]
+        [TestCase("//;\n1;2;3", -4)]
+        [TestCase("//[;;]\n1;;2;;3", -4)]
+        [TestCase("//[;;][.]\n1;;2.3", -4)]
+        [TestCase("//[;;][.]\n1;;2.3", -4)]
+        public void Subtract_ValidInput_ReturnDifference(string input, int expectedDifference)
+        {
+            var difference = _calc.Subtract(input);
+
+            Assert.AreEqual(difference, expectedDifference);
+        }
+
+        [TestCase("1,2,3", 6)]
+        [TestCase("1,2,0", 0)]
+        [TestCase("//;\n1;2;3", 6)]
+        [TestCase("//[;;]\n1;;2;;3", 6)]
+        [TestCase("//[;;][.]\n1;;2.3", 6)]
+        public void Multiply_ValidInput_ReturnProduct(string input, int expectedProduct)
+        {
+            var product = _calc.Mulitply(input);
+
+            Assert.AreEqual(product, expectedProduct);
+        }
+
+        [TestCase("20,2,2", 5)]
+        [TestCase("//;\n20;2;2", 5)]
+        [TestCase("//[;;]\n20;;2;;2", 5)]
+        [TestCase("//[;;][.]\n20;;2.2", 5)]
+        public void Divide_ValidInput_ReturnQuotient(string input, int expectedQuotient)
+        {
+            var quotient = _calc.Divide(input);
+
+            Assert.AreEqual(quotient, expectedQuotient);
+        }
+
+        [TestCase("20,2,0", 0)]
+        public void Divide_ByZero_ThrowError(string input, int expectedQuotient)
+        {
+            Assert.Throws<DivideByZeroException>(() =>
+                _calc.Divide(input)
+            );
+        }
     }
 }
