@@ -6,7 +6,15 @@ namespace StringCalculator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Calculator calculator = new Calculator();
+
+            // Read input until termination
+            while (true)
+            {
+                var input = Console.ReadLine();
+
+                calculator.Add(input);
+            }
         }
     }
 }
