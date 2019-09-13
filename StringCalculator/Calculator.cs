@@ -135,8 +135,8 @@ namespace StringCalculator
                 }
             }
 
-            // Ignore all numbers greater than 1000
-            // by setting them to 0
+            // Ignore all numbers greater than
+            // the upperbound by setting them to 0
             _numbers = _numbers.Select(num =>
                 {
                     return num <= _upperBound ? num : 0;
