@@ -9,7 +9,7 @@
 - [x] Ignore any number greater than 1000
 - [x] Support 1 custom single character length delimiter
 - [x] Support 1 custom delimiter of any length
-- [ ] Support multiple delimiters of any length
+- [x] Support multiple delimiters of any length
 
 ### Stretch Goals
 

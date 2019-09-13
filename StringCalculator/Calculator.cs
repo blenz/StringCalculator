@@ -71,23 +71,30 @@ namespace StringCalculator
             var delimiters = new HashSet<string>() { ",", "\n" };
 
             // Check for custom delimiter
-            var match = Regex.Match(input, @"^//(\[(.*)\]|(.))\n(.*)");
+            var match = Regex.Match(input, @"^//((?:\[(.*?)\])+|.)\n(.*)");
 
             if (match.Success)
             {
                 // Determine the delimiter type
                 var firstMatch = match.Groups[1].Value;
 
-                var isMultiLengthDelimiter =
+                // Check first and last chars
+                // to determine type
+                var isSingleDelimiter = !(
                     firstMatch.StartsWith('[')
-                    && firstMatch.EndsWith(']');
+                    && firstMatch.EndsWith(']')
+                );
 
                 // Based on the delimiter type,
                 // choose the correct group to
-                // get the delimiter
-                var group = isMultiLengthDelimiter ? 2 : 3;
+                // get delimiters
+                var group = isSingleDelimiter ? 1 : 2;
 
-                delimiters.Add(match.Groups[group].Value);
+                var captures = match.Groups[group].Captures;
+                foreach (Capture capture in captures)
+                {
+                    delimiters.Add(capture.Value);
+                }
 
                 // Set input to everything 
                 // after the custom delimiter

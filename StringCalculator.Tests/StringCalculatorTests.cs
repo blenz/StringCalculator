@@ -180,5 +180,29 @@ namespace StringCalculator.Tests
 
             Assert.AreEqual(sum, expectedSum);
         }
+
+        [TestCase("//[*][!!][r9r]\n11r9r22*33!!44", 110)]
+        [TestCase("//[,][]][[]\n11,22]33[44", 110)]
+        [TestCase("//[][][]\n11,22,33,44", 110)]
+        [TestCase("//[][][]\n11", 11)]
+        public void Add_ValidMultipleCustomLengthDelimiters_ReturnSum(string input, int expectedSum)
+        {
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
+
+        [TestCase("[*][!!][r9r]\n11r9r22*33!!44", 0)]
+        [TestCase("/[*][!!][r9r]\n11r9r22*33!!44", 0)]
+        [TestCase("//[*][!!][r9r]11r9r22*33!!44", 0)]
+        [TestCase("//[*][!!][r9r]11r9r22*33,44", 44)]
+        [TestCase("//\n11r9r22*33!!44", 0)]
+        [TestCase("//[,][,][,]\n11r9r22*33!!44", 0)]
+        public void Add_InvalidMultipleCustomLengthDelimiters_ReturnSum(string input, int expectedSum)
+        {
+            var sum = _calc.Add(input);
+
+            Assert.AreEqual(sum, expectedSum);
+        }
     }
 }
