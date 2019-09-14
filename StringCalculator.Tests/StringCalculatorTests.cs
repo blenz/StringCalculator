@@ -222,6 +222,8 @@ namespace StringCalculator.Tests
         [TestCase("//;\n1;2;3", 6)]
         [TestCase("//[;;]\n1;;2;;3", 6)]
         [TestCase("//[;;][.]\n1;;2.3", 6)]
+        [TestCase("1,1001,3", 3)]
+        [TestCase("1,a,3", 3)]
         public void Multiply_ValidInput_ReturnProduct(string input, int expectedProduct)
         {
             var product = _calc.Mulitply(input);
@@ -233,6 +235,8 @@ namespace StringCalculator.Tests
         [TestCase("//;\n20;2;2", 5)]
         [TestCase("//[;;]\n20;;2;;2", 5)]
         [TestCase("//[;;][.]\n20;;2.2", 5)]
+        [TestCase("0,1001,1", 0)]
+        [TestCase("0,a,1", 0)]
         public void Divide_ValidInput_ReturnQuotient(string input, int expectedQuotient)
         {
             var quotient = _calc.Divide(input);

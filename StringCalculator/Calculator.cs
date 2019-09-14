@@ -32,7 +32,6 @@ namespace StringCalculator
 
         public Calculator()
         {
-            _numbers = new List<int>();
             _delimiters = new HashSet<string>() { ",", "\n" };
             _denyNegativeNumbers = true;
             _upperBound = 1000;
@@ -58,21 +57,15 @@ namespace StringCalculator
             return Calculate(input, '/');
         }
 
-        private int Calculate(string input, char mathOperation)
+        private int Calculate(string input, char mathOperator)
         {
-            if (String.IsNullOrEmpty(input) || String.IsNullOrWhiteSpace(input))
-            {
-                return 0;
-            }
-
             // Parse and clean the data
-            ParseInput(input);
-            ValidateNumbers();
+            ParseAndValidateInput(input);
 
             // Determine the operation to calculate
             Func<int, int, int> operation;
 
-            switch (mathOperation)
+            switch (mathOperator)
             {
                 case '+':
                     operation = (a, b) => a + b;
@@ -90,33 +83,34 @@ namespace StringCalculator
                     throw new ArgumentException("Invalid math operation");
             }
 
-            var result = _numbers.Aggregate(operation);
+            var result = _numbers != null && _numbers.Count > 0 ? _numbers.Aggregate(operation) : 0;
 
-            PrintFormula(mathOperation, result);
+            PrintFormula(mathOperator, result);
 
             return result;
         }
 
-        private void ParseInput(string input)
+        private void ParseAndValidateInput(string input)
         {
+            if (String.IsNullOrEmpty(input) || String.IsNullOrWhiteSpace(input))
+            {
+                return;
+            }
+
             var delimiters = GetCustomDelimiters(ref input);
 
             // Try to parse strings 
-            // as ints else use 0
-            var numbers = input.Split(delimiters, StringSplitOptions.None)
-                .Select(i =>
-                {
-                    int number = 0;
-                    Int32.TryParse(i, out number);
-                    return number;
-                });
+            // as ints else remove them
+            _numbers = input
+                .Split(delimiters, StringSplitOptions.None)
+                // Filter out strings that are not ints
+                .Where(i => { return Int32.TryParse(i, out int number); })
+                // Convert string to ints
+                .Select(num => Int32.Parse(num))
+                // Filter out numbers over upperbound
+                .Where(num => { return num <= _upperBound; })
+                .ToList();
 
-            _numbers.Clear();
-            _numbers.AddRange(numbers);
-        }
-
-        private void ValidateNumbers()
-        {
             if (_denyNegativeNumbers)
             {
                 var negativeNumbers = _numbers
@@ -135,13 +129,6 @@ namespace StringCalculator
                 }
             }
 
-            // Ignore all numbers greater than
-            // the upperbound by setting them to 0
-            _numbers = _numbers.Select(num =>
-                {
-                    return num <= _upperBound ? num : 0;
-                })
-                .ToList();
         }
 
         private string[] GetCustomDelimiters(ref string input)
@@ -182,6 +169,11 @@ namespace StringCalculator
 
         private void PrintFormula(char mathOperation, int result)
         {
+            if (_numbers == null || _numbers.Count == 0)
+            {
+                return;
+            }
+
             var formula = String.Join(mathOperation, _numbers.ToArray()).TrimEnd();
 
             Console.WriteLine(String.Format("{0} = {1}", formula, result));
