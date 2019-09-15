@@ -60,7 +60,7 @@ namespace StringCalculator
         private int Calculate(string input, char mathOperator)
         {
             // Parse and clean the data
-            ParseAndValidateInput(input);
+            _numbers = ParseAndValidateInput(input);
 
             // Determine the operation to calculate
             Func<int, int, int> operation;
@@ -83,25 +83,27 @@ namespace StringCalculator
                     throw new ArgumentException("Invalid math operation");
             }
 
-            var result = _numbers != null && _numbers.Count > 0 ? _numbers.Aggregate(operation) : 0;
+            var result = _numbers != null && _numbers.Count > 0
+                ? _numbers.Aggregate(operation)
+                : 0;
 
             PrintFormula(mathOperator, result);
 
             return result;
         }
 
-        private void ParseAndValidateInput(string input)
+        private List<int> ParseAndValidateInput(string input)
         {
             if (String.IsNullOrEmpty(input) || String.IsNullOrWhiteSpace(input))
             {
-                return;
+                return null;
             }
 
             var delimiters = GetCustomDelimiters(ref input);
 
             // Try to parse strings 
             // as ints else remove them
-            _numbers = input
+            var validatedNumbers = input
                 .Split(delimiters, StringSplitOptions.None)
                 // Filter out strings that are not ints
                 .Where(i => { return Int32.TryParse(i, out int number); })
@@ -113,7 +115,7 @@ namespace StringCalculator
 
             if (_denyNegativeNumbers)
             {
-                var negativeNumbers = _numbers
+                var negativeNumbers = validatedNumbers
                     .Where(num => num < 0)
                     .ToList();
 
@@ -129,6 +131,7 @@ namespace StringCalculator
                 }
             }
 
+            return validatedNumbers;
         }
 
         private string[] GetCustomDelimiters(ref string input)
