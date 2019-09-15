@@ -244,8 +244,8 @@ namespace StringCalculator.Tests
             Assert.AreEqual(quotient, expectedQuotient);
         }
 
-        [TestCase("20,2,0", 0)]
-        public void Divide_ByZero_ThrowError(string input, int expectedQuotient)
+        [TestCase("20,2,0")]
+        public void Divide_ByZero_ThrowError(string input)
         {
             Assert.Throws<DivideByZeroException>(() =>
                 _calc.Divide(input)
