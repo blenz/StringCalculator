@@ -137,7 +137,7 @@ namespace StringCalculator
         private string[] GetCustomDelimiters(ref string input)
         {
             // Check for custom delimiter
-            var match = Regex.Match(input, @"^//((?:\[(.*?)\])+|.)\n(.*)");
+            var match = Regex.Match(input, @"^//((?:\[(.*?)\])+|.)\n(.*)", RegexOptions.Singleline);
 
             if (match.Success)
             {

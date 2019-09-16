@@ -132,6 +132,7 @@ namespace StringCalculator.Tests
         [TestCase("///\n1/5", 6)]
         [TestCase("//\n\n1\n5", 6)]
         [TestCase("// \n1 5", 6)]
+        [TestCase("//;\n1\n1,1", 3)]
         public void Add_ValidCustomDelimiter_ReturnSum(string input, int expectedSum)
         {
             var sum = _calc.Add(input);
@@ -184,6 +185,7 @@ namespace StringCalculator.Tests
         [TestCase("//[*][!!][r9r]\n11r9r22*33!!44", 110)]
         [TestCase("//[,][]][[]\n11,22]33[44", 110)]
         [TestCase("//[][][]\n11,22,33,44", 110)]
+        [TestCase("//[][][]\n10\n10,10", 30)]
         [TestCase("//[][][]\n11", 11)]
         public void Add_ValidMultipleCustomLengthDelimiters_ReturnSum(string input, int expectedSum)
         {
