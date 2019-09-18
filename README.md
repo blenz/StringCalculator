@@ -7,8 +7,8 @@ A C# application that calculates math operations given a string of integers that
 **Ex Input:**
 `1,2`
 `//;\n2;5`
-`/[***]\n1***2***3`
-`/['][/]\n1'2/3`
+`//[***]\n1***2***3`
+`//['][/]\n1'2/3`
 
 ### Requirements to Run
 
